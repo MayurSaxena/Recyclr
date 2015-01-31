@@ -21,6 +21,8 @@ body{overflow:hidden;background:lightskyblue;font-size:18px;}
 #garbage{width:50px;height:50px;border-radius:25px;background:red;margin-left:auto;margin-right:auto;}
 #instruct1,#instruct2{margin-top:320px;font-size:45px;line-height:70px;color:#555;width:800px;margin-left:auto;margin-right:auto;}
 a.back{position:absolute;bottom:18px;left:20px;}
+#score{position:absolute;left:20px;top:15px;color:gold;text-shadow:0 0 1px white;font-size:26px;}
+#time{position:relative;top:15px;color:white;text-shadow:0 0 1px white;font-size:26px;}
 	</style>
 </head>
 <body>
@@ -66,7 +68,7 @@ a.back{position:absolute;bottom:18px;left:20px;}
 		<div id=game>
 			<div id=time>0</div>
 			<div id=score>0</div>
-			<div style="width:960px;margin-left:auto;margin-right:auto;margin-top:100px;overflow:hidden;margin-bottom:300px;position:relative;" id=cans>
+			<div style="width:960px;margin-left:auto;margin-right:auto;margin-top:100px;overflow:hidden;margin-bottom:200px;position:relative;" id=cans>
 				<div style="height:300px;width:210px;background:grey;margin-right:40px;float:left;"></div>
 				<div style="height:300px;width:210px;background:blue;margin-right:40px;float:left;"></div>
 				<div style="height:300px;width:210px;background:green;margin-right:40px;float:left;"></div>
@@ -96,92 +98,16 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>window.jQuery||document.write('<script src="jquery.js"><\/script>');</script>
 	<script src="includes.js"></script>
-	<script src='myo.js'></script>
+
+	
 	<script>
-	var myo = Myo.create();
-	
-	// throw_cons holds all recent data.y values considered part of
-	// a "throw"
-	// throw_thresh is the threshold value of throw_cons for a throw
-	// throw_strength is the minimum strength of a throw
-	var throw_cons = [];
-	var throw_thresh = 3;
-	var throw_strength = 300;
-	
-	// sens represents the sensitivity of a throw
-	var sens = 250;
-	
-	// angle is the z-orientation at the most recent frame.
-	var angle = 0;
-	
-	// left and right are the two extreme angles allowed
-	var left = 0;
-	var right = 0;
-	var left_cal = false, right_cal = false;
-	
-	var score = 0;
-	
-	myo.on('gyroscope', function(data){
-		// console.log(angle);
-		if(throw_cons.length == throw_thresh
-		&& throw_cons[throw_cons.length - 1] > throw_strength) {
-			throw_cons = [];
-			// console.log("\n" + angle)
-			// console.log(left + " " + right);
-			if(angle < right && angle > left) {
-				var t = swish(angle);
-				$(document).trigger('throw', {bin: t});
-				// console.log(swish(angle));
-			} else if(!left_cal || !right_cal) {
-				swish(angle);
-			}
-		} else if(Math.abs(data.y) > sens) {
-			throw_cons.push(data.y);
-		} else {
-			throw_cons = [];
-		}
-	});
-	
-	myo.on('orientation', function(data) {
-		angle = data.z;
-	});
-	
-	function swish(angle) {
-		var variance = (right - left)/4;
-		if(!left_cal) {
-			// myo.zeroOrientation();
-			left = angle;
-			left_cal = true;
-			$(document).trigger('calibrated_left');
-		} else if (!right_cal) {
-			if(left < right) {
-				right = angle;
-			} else {
-				right = left;
-				left = angle;
-			}
-			right_cal = true;
-			$(document).trigger('calibrated_right');
-		}
-		// console.log(score);
-		console.log(angle);
-		if(angle < left + variance) {
-			return 4;
-		} else if(angle < left + 2 * variance) {
-			return 3;
-		} else if(angle < left + 3 * variance) {
-			return 2;
-		} else {
-			return 1;
-		}
-	}
-	$(document).on('calibrate', function() {
-		// myo.zeroOrientation();
-		left_cal = false;
-		right_cal = false;
-	});
-	</script>
-	<script>
+function end(){
+	alert('Your score is '+$('#score').text());
+	if(parseInt($('#score').text())<45)alert('You suck.');
+	$('#game').fadeOut(400);
+	$('#home').slideDown(400);
+}
+
 $(document).ready(function(){
 	
 	setTimeout(function(){
@@ -195,14 +121,22 @@ $(document).ready(function(){
 		$('#about').css({position:'absolute',top:-1000}).animate({top:0});
 	});
 	
+	var rounds=0;
+	var timer;
 	$('#play').click(function(e){
 		e.preventDefault();
 		$('#home').slideUp(400,function(){
+			rounds=0;
 			$('#game').fadeIn(400);
 			
 			$('#time').text('10');
-			var timer=setInterval(function(){
+			timer=setInterval(function(){
 				if($('#time').text()=='0'){
+					rounds++;
+					if(rounds>=5){
+						clearInterval(timer);
+						end();
+					}
 					$('#time').attr('style','').text('11');
 				}
 				$('#time').text(parseInt($('#time').text())-1);
@@ -255,6 +189,11 @@ $(document).ready(function(){
 			return;
 		}else{
 			$('#score').text(parseInt($('#score').text())+parseInt($('#time').text()));
+			rounds++;
+			if(rounds>=5){
+				clearInterval(timer);
+				end();
+			}
 			$('#time').text('10');
 		}
 		if(e.bin==1){
