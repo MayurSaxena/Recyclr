@@ -66,8 +66,6 @@ a.back{position:absolute;bottom:18px;left:20px;}
 		<div id=game>
 			<div class="score">0</div>
 			<div style="width:960px;margin-left:auto;margin-right:auto;margin-top:100px;overflow:hidden;margin-bottom:300px;position:relative;" id=cans>
-				<iframe src="3DCans.html" style="width:960px;border:none;height:300px;position:absolute;top:0;left:0;background:rgba(135,206,250,0.5);"></iframe>
-
 				<div style="height:300px;width:210px;background:grey;margin-right:40px;float:left;"></div>
 				<div style="height:300px;width:210px;background:blue;margin-right:40px;float:left;"></div>
 				<div style="height:300px;width:210px;background:green;margin-right:40px;float:left;"></div>
@@ -98,93 +96,6 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	<script>window.jQuery||document.write('<script src="jquery.js"><\/script>');</script>
 	<script src="includes.js"></script>
 
-	<script src='myo.js'></script>
-	<script>
-	var myo = Myo.create();
-	
-	// throw_cons holds all recent data.y values considered part of
-	// a "throw"
-	// throw_thresh is the threshold value of throw_cons for a throw
-	// avoid_karate is the sensitivity of avoiding sideways karate chops as throws
-	// throw_strength is the minimum strength of a throw
-	var throw_cons = [];
-	var throw_thresh = 3;
-	var throw_strength = 300;
-	
-	// sens represents the sensitivity of a throw
-	var sens = 250;
-	
-	// angle is the z-orientation at the most recent frame.
-	var angle = 0;
-	
-	// left and right are the two extreme angles allowed
-	var left = 0;
-	var right = 0;
-	var left_cal = false, right_cal = false;
-	
-	var score = 0;
-	
-	myo.on('gyroscope', function(data){
-		if(throw_cons.length == throw_thresh
-		&& throw_cons[throw_cons.length - 1] > throw_strength) {
-			throw_cons = [];
-			console.log("\n" + angle)
-			console.log(left + " " + right);
-			if(angle < right && angle > left) {
-				var t = swish(angle);
-				$(document).trigger('throw', {bin: t});
-				// console.log(swish(angle));
-			} else if(!left_cal || !right_cal) {
-				swish(angle);
-			}
-		} else if(Math.abs(data.y) > sens) {
-			throw_cons.push(data.y);
-		} else {
-			throw_cons = [];
-		}
-	});
-	
-	myo.on('orientation', function(data) {
-		angle = data.z;
-	});
-	
-	function swish(angle) {
-		var variance = (right - left)/4;
-		if(!left_cal) {
-			// myo.zeroOrientation();
-			left = angle;
-			left_cal = true;
-			$(document).trigger('calibrated_left');
-		} else if (!right_cal) {
-			if(left < right) {
-				right = angle;
-			} else {
-				right = left;
-				left = angle;
-			}
-			right_cal = true;
-			$(document).trigger('calibrated_right');
-		}
-		console.log(score);
-		console.log(angle);
-		if(angle < left + variance) {
-			return 4;
-		} else if(angle < left + 2 * variance) {
-			return 3;
-		} else if(angle < left + 3 * variance) {
-			return 2;
-		} else {
-			return 1;
-		}
-	}
-	$(document).on('calibrate', function() {
-		// myo.zeroOrientation();
-		left_cal = false;
-		right_cal = false;
-	});
-	</script>
-=======
->>>>>>> e0ec6e81dc9d73928a3ba16a80214c1f943b7258
 	
 	<script>
 $(document).ready(function(){
