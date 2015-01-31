@@ -19,7 +19,8 @@ body{overflow:hidden;background:lightskyblue;font-size:18px;}
 #info{position:absolute;bottom:18px;left:20px;top:auto;font-size:24px;}
 #cali{position:absolute;bottom:18px;left:60px;top:auto;font-size:24px;}
 #garbage{width:50px;height:50px;border-radius:25px;background:red;margin-left:auto;margin-right:auto;}
-#instruct1,#instruct2{margin-top:300px;font-size:45px;line-height:70px;color:#555;width:800px;margin-left:auto;margin-right:auto;}
+#instruct1,#instruct2{margin-top:320px;font-size:45px;line-height:70px;color:#555;width:800px;margin-left:auto;margin-right:auto;}
+a.back{position:absolute;bottom:18px;left:20px;}
 	</style>
 </head>
 <body>
@@ -63,11 +64,13 @@ body{overflow:hidden;background:lightskyblue;font-size:18px;}
 				<div style="height:200px;width:130px;background:black;float:left;"></div>
 			</div>
 			<div id=garbage></div>
+			<a href=# class="btn btn-primary back">Back</a>
 		</div>
 		
 		<div id=calibrate>
-			<div id=instruct1>Put on the Myo and pretend to throw something 45&deg; to the <b>left</b>.</div>
-			<div id=instruct2 style="display:none">Now pretend to throw something 45&deg; to the <b>right</b>.</div>
+			<div id=instruct1>Put on the Myo and pretend to throw something 90&deg; to the <b>left</b>.</div>
+			<div id=instruct2 style="display:none">Now pretend to throw something 90&deg; to the <b>right</b>.</div>
+			<a href=# class="btn btn-primary back">Back</a>
 		</div>
 		
 		<div id=end>
@@ -180,6 +183,13 @@ $(document).ready(function(){
 		});
 	});
 	
+	$('a.back').click(function(e){
+		e.preventDefault();
+		$('#container>*:visible').fadeOut(400,function(){
+			$('#home').fadeIn(400);
+		});
+	});
+	
 	$('#cali').click(function(e){
 		e.preventDefault();
 		$('#home').slideUp(400,function(){
@@ -205,6 +215,61 @@ $(document).ready(function(){
 		left:"linear"
 	};
 	var throwing=false;
+	$(document).on('throw',function(e){
+		if(throwing)return;
+		if($('#game').css('display')=='none')return;
+		
+		if(e.bin>0){
+			alert('You need to calibrate your Myo first.');
+			return;
+		}
+		if(e.bin==1){
+			throwing=true;
+			setTimeout(function(){
+				$('#garbage').css('z-index',-2);
+			},620);
+			$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(1)').offset().top,left:$('#cans>div:nth-child(1)').offset().left+$('#cans>div:nth-child(1)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+			complete:function(){
+				$('#garbage').attr('style','');
+				throwing=false;
+			},
+			specialEasing:easing});
+		}else if(e.bin==2){
+			throwing=true;
+			setTimeout(function(){
+				$('#garbage').css('z-index',-2);
+			},620);
+			$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(2)').offset().top,left:$('#cans>div:nth-child(2)').offset().left+$('#cans>div:nth-child(2)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+			complete:function(){
+				$('#garbage').attr('style','');
+				throwing=false;
+			},
+			specialEasing:easing});
+		}else if(e.bin==3){
+			throwing=true;
+			setTimeout(function(){
+				$('#garbage').css('z-index',-2);
+			},620);
+			$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(3)').offset().top,left:$('#cans>div:nth-child(3)').offset().left+$('#cans>div:nth-child(3)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+			complete:function(){
+				$('#garbage').attr('style','');
+				throwing=false;
+			},
+			specialEasing:easing});
+		}else if(e.bin==4){
+			throwing=true;
+			setTimeout(function(){
+				$('#garbage').css('z-index',-2);
+			},620);
+			$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(4)').offset().top,left:$('#cans>div:nth-child(4)').offset().left+$('#cans>div:nth-child(4)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+			complete:function(){
+				$('#garbage').attr('style','');
+				throwing=false;
+			},
+			specialEasing:easing});
+		}
+		
+	});
 	$(document).keypress(function(e){
 		if(throwing)
 			return;
