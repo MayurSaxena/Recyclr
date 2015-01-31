@@ -248,10 +248,11 @@ $(document).ready(function(){
 		if(e.bin<=0){
 			alert('You need to calibrate your Myo first.');
 			return;
-		}
-		if(e.bin==1){
+		} else {
 			score += 1;
 			$('div.score').html(score);
+		}
+		if(e.bin==1){
 			throwing=true;
 			setTimeout(function(){
 				$('#garbage').css('z-index',-2);
