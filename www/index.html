@@ -105,7 +105,6 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	// throw_cons holds all recent data.y values considered part of
 	// a "throw"
 	// throw_thresh is the threshold value of throw_cons for a throw
-	// avoid_karate is the sensitivity of avoiding sideways karate chops as throws
 	// throw_strength is the minimum strength of a throw
 	var throw_cons = [];
 	var throw_thresh = 3;
@@ -125,11 +124,12 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	var score = 0;
 	
 	myo.on('gyroscope', function(data){
+		// console.log(angle);
 		if(throw_cons.length == throw_thresh
 		&& throw_cons[throw_cons.length - 1] > throw_strength) {
 			throw_cons = [];
-			console.log("\n" + angle)
-			console.log(left + " " + right);
+			// console.log("\n" + angle)
+			// console.log(left + " " + right);
 			if(angle < right && angle > left) {
 				var t = swish(angle);
 				$(document).trigger('throw', {bin: t});
@@ -165,7 +165,7 @@ a.back{position:absolute;bottom:18px;left:20px;}
 			right_cal = true;
 			$(document).trigger('calibrated_right');
 		}
-		console.log(score);
+		// console.log(score);
 		console.log(angle);
 		if(angle < left + variance) {
 			return 4;
@@ -183,9 +183,6 @@ a.back{position:absolute;bottom:18px;left:20px;}
 		right_cal = false;
 	});
 	</script>
-=======
->>>>>>> e0ec6e81dc9d73928a3ba16a80214c1f943b7258
-	
 	<script>
 $(document).ready(function(){
 	
