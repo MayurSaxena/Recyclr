@@ -86,81 +86,6 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script>window.jQuery||document.write('<script src="jquery.js"><\/script>');</script>
 	<script src="includes.js"></script>
-	<script src='myo.js'></script>
-	<script>
-	var myo = Myo.create();
-	
-	// throw_cons holds all recent data.y values considered part of
-	// a "throw"
-	// throw_thresh is the threshold value of throw_cons for a throw
-	// avoid_karate is the sensitivity of avoiding sideways karate chops as throws
-	// throw_strength is the minimum strength of a throw
-	var throw_cons = [];
-	var throw_thresh = 3;
-	var throw_strength = 300;
-	
-	// sens represents the sensitivity of a throw
-	var sens = 250;
-	
-	// angle is the z-orientation at the most recent frame.
-	var angle = 0;
-	
-	// left and right are the two extreme angles allowed
-	var left = 0;
-	var right = 0;
-	var left_cal = false, right_cal = false;
-	
-	myo.on('gyroscope', function(data){
-		// console.log(angle);
-		if(throw_cons.length == throw_thresh
-		&& throw_cons[throw_cons.length - 1] > throw_strength) {
-			throw_cons = [];
-			console.log(angle);
-			if(angle < right && angle > left) {
-				var t = swish(angle);
-				$(document).trigger('throw', {bin: t});
-				console.log(swish(angle));
-			} else if(!left_cal || !right_cal) {
-				swish(angle);
-			}
-		} else if(Math.abs(data.y) > sens) {
-			throw_cons.push(data.y);
-		} else {
-			throw_cons = [];
-		}
-	});
-	
-	myo.on('orientation', function(data) {
-		angle = data.x;
-	});
-	
-	function swish(angle) {
-		var variance = (right - left)/4;
-		if(!left_cal) {
-			myo.zeroOrientation();
-			left = angle;
-			left_cal = true;
-			$(document).trigger('calibrated_left');
-		} else if (!right_cal) {
-			right = angle;
-			right_cal = true;
-			$(document).trigger('calibrated_right');
-		}
-		if(angle < left + variance) {
-			return 4;
-		} else if(angle < left + 2 * variance) {
-			return 3;
-		} else if(angle < left + 3 * variance) {
-			return 2;
-		} else {
-			return 1;
-		}
-	}
-	$(document).on('calibrate', function() {
-		left_cal = false;
-		right_cal = false;
-	})
-	</script>
 	
 	<script>
 $(document).ready(function(){
@@ -192,6 +117,8 @@ $(document).ready(function(){
 	
 	$('#cali').click(function(e){
 		e.preventDefault();
+		$('#instruct1').hide();
+		$('#instruct2').show();
 		$('#home').slideUp(400,function(){
 			$('#calibrate').fadeIn(400,function(){
 				$(document).trigger('calibrate');
