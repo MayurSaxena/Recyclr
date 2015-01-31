@@ -1,0 +1,56 @@
+<html>
+    <body>
+       <script src="three.min.js"></script>
+        <script>
+			//ThreeJS Init Stuff
+			var renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.y = -400;
+            camera.position.z = 400;
+            camera.rotation.x = .70;            
+
+            var scene = new THREE.Scene();
+
+            var light = new THREE.DirectionalLight('white', 1);
+            light.position.set(0,-400,400).normalize();
+            scene.add(light);
+			
+			renderer.setClearColor( 0x9999ff, 1);
+			/////////////////////// END OF INIT STUFF ////////////////////////////////
+			
+			
+			//////////////////// CANS //////////////////////////////
+
+            var recycleCan = new THREE.Mesh(new THREE.CylinderGeometry(50,37,100,20,20,false), new THREE.MeshLambertMaterial({color: 'blue',}));
+            scene.add(recycleCan);
+			recycleCan.position.set(-300,0,-50);
+			recycleCan.rotation.x = 20;
+			
+            var compostCan = new THREE.Mesh(new THREE.CylinderGeometry(50,37,100,20,20,false), new THREE.MeshLambertMaterial({color: 'green',}));
+            scene.add(compostCan);
+			compostCan.position.set(-100,0,0);
+			compostCan.rotation.x = 20;
+
+            var clearCan = new THREE.Mesh(new THREE.CylinderGeometry(50,37,100,20,20,false), new THREE.MeshLambertMaterial({color: 'grey',}));
+            scene.add(clearCan);
+			clearCan.position.set(100,0,0);
+			clearCan.rotation.x = 20;
+			
+            var hazardCan = new THREE.Mesh(new THREE.CylinderGeometry(50,37,100,20,20,false), new THREE.MeshLambertMaterial({color: 'red',}));
+            scene.add(hazardCan);
+			hazardCan.position.set(300,0,-50);
+			hazardCan.rotation.x = 20;			
+
+			var render = function () {
+				requestAnimationFrame( render );
+				renderer.render(scene, camera);
+			};
+
+
+            render();
+        </script>
+    </body>
+</html>
