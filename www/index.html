@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=utf-8>
+	<title>Recyclr</title>
+	<meta name=description content="good kids recycle">
+	<meta name=viewport content="width=device-width,initial-scale=1">
+
+	<link rel=stylesheet href=bootstrap.css>
+	<style>
+html,body,#container,#container>div{height:815px;}
+body{overflow:hidden;background:lightskyblue;font-size:18px;}
+#container>div{display:none;text-align:center;overflow:hidden;}
+#container #loading{display:block;}
+#loading .loading{font-size:30px;color:rgba(0,0,0,0.5);margin-top:340px;}
+#title{position:relative;z-index:5;margin-top:280px;font-size:60px;font-weight:700;}
+#earth{width:100%;position:absolute;top:0;bottom:0;left:0;right:0;background-size:cover;}
+#play{position:relative;z-index:5;margin-top:50px;padding-left:25px;padding-right:25px;font-size:24px;}
+#info{position:absolute;bottom:18px;left:20px;top:auto;font-size:24px;}
+#garbage{width:50px;height:50px;border-radius:25px;background:red;margin-left:auto;margin-right:auto;}
+	</style>
+</head>
+<body>
+	<div id=container>
+	
+		<!-- these are the various "pages" -->
+		<div id=loading>
+			<div class=loading>Loading...</div>
+		</div>
+		
+		<div id=home>
+			<h1 id=title>Recyclr</h1>
+			<div id=earth></div>
+			<a href=# class="btn btn-lg btn-warning" id=play>Play!</a>
+			<a href=# class="glyphicon glyphicon-info-sign" id=info data-toggle=modal data-target=#about></a>
+			
+			<div class="modal fade" id=about>
+			  <div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">About Recyclr</h4>
+				  </div>
+				  <div class="modal-body">
+					<p>we're cool</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div>
+		</div>
+		
+		<div id=game>
+			<div style="width:670px;margin-left:auto;margin-right:auto;margin-top:120px;overflow:hidden;margin-bottom:300px;" id=cans>
+				<div style="height:200px;width:130px;background:grey;margin-right:50px;float:left;"></div>
+				<div style="height:200px;width:130px;background:blue;margin-right:50px;float:left;"></div>
+				<div style="height:200px;width:130px;background:green;margin-right:50px;float:left;"></div>
+				<div style="height:200px;width:130px;background:black;float:left;"></div>
+			</div>
+			<div id=garbage></div>
+		</div>
+		
+		<div id=end>
+		
+		</div>
+		
+		<div id=score>
+		
+		</div>
+		
+		<div id=calibrate>
+		
+		</div>
+	</div>
+
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>window.jQuery||document.write('<script src="jquery.js"><\/script>');</script>
+	<script src="includes.js"></script>
+	<script>
+$(document).ready(function(){
+	
+	setTimeout(function(){
+		$('#loading').fadeOut(400,function(){
+			$('#home').fadeIn(400);
+		});
+	},10);
+	
+	$('#info').click(function(e){
+		e.preventDefault();
+		$('#about').css({position:'absolute',top:-1000}).animate({top:0});
+	});
+	
+	$('#play').click(function(e){
+		e.preventDefault();
+		$('#home').slideUp(400,function(){
+			$('#game').fadeIn(400);
+		});
+	});
+	
+	var easing={
+		top:"easeOutBack",
+		left:"linear"
+	};
+	var throwing=false;
+	$(document).keypress(function(e){
+		if(throwing)
+			return;
+		if($('#game').css('display')!='none'){
+			if(e.which==49){
+				throwing=true;
+				setTimeout(function(){
+					$('#garbage').css('z-index',-2);
+				},620);
+				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(1)').offset().top,left:$('#cans>div:nth-child(1)').offset().left+$('#cans>div:nth-child(1)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+				complete:function(){
+					$('#garbage').attr('style','');
+					throwing=false;
+				},
+				specialEasing:easing});
+			}else if(e.which==50){
+				throwing=true;
+				setTimeout(function(){
+					$('#garbage').css('z-index',-2);
+				},620);
+				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(2)').offset().top,left:$('#cans>div:nth-child(2)').offset().left+$('#cans>div:nth-child(2)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+				complete:function(){
+					$('#garbage').attr('style','');
+					throwing=false;
+				},
+				specialEasing:easing});
+			}else if(e.which==51){
+				throwing=true;
+				setTimeout(function(){
+					$('#garbage').css('z-index',-2);
+				},620);
+				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(3)').offset().top,left:$('#cans>div:nth-child(3)').offset().left+$('#cans>div:nth-child(3)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+				complete:function(){
+					$('#garbage').attr('style','');
+					throwing=false;
+				},
+				specialEasing:easing});
+			}else if(e.which==52){
+				throwing=true;
+				setTimeout(function(){
+					$('#garbage').css('z-index',-2);
+				},620);
+				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(4)').offset().top,left:$('#cans>div:nth-child(4)').offset().left+$('#cans>div:nth-child(4)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
+				complete:function(){
+					$('#garbage').attr('style','');
+					throwing=false;
+				},
+				specialEasing:easing});
+			}
+		}
+	});
+});
+	</script>
+</body>
+</html>
+
+
