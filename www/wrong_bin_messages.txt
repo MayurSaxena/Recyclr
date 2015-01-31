@@ -1,0 +1,38 @@
+Hazardous
+
+Whoops! You put that in the hazardous waste bin!
+
+Hazardous waste is garbage that poses a threat to either public
+health or the environment. This includes items that are toxic,
+flammable, corrosive, or have some other property which requires
+that they are disposed of properly. This includes things like
+paint, thermometers, pesticides and the blood of your enemies.
+
+Recycling
+
+Oops! You put that in the recycling bin!
+
+Only waste that can potentially be changed into new products should
+go into the recycling bin. This is done so that energy gone into 
+making this waste can be salvaged instead of wasted (no pun intended).
+Waste that should go in this bin include things like carboard, paper, 
+and electronics.
+
+Compost
+
+Uh oh! You put that in the compost bin!
+
+Organic matter should be the only thing going into a compost bin.
+Compost is waste that can be decomposed and recycled as fertilizer
+or soil amendment, and so only green waste should go into this bin.
+That would include things like banana peels, leaves, and bread.
+
+General
+
+Oh no! You threw that into the general waste bin!
+
+Something should only be thrown into the general waste bin if it
+doesn't belong in any of the other bins. This means that it can't 
+be organic or recycled, and it wouldn't hurt either the environment or 
+public health if it were thrown into a landfill. This includes
+things like styrofoam, balloons and plastic bags.
