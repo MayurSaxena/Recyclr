@@ -187,15 +187,8 @@ $(document).ready(function(){
 		if(e.bin<=0){
 			alert('You need to calibrate your Myo first.');
 			return;
-		}else{
-			$('#score').text(parseInt($('#score').text())+parseInt($('#time').text()));
-			rounds++;
-			if(rounds>=5){
-				clearInterval(timer);
-				end();
-			}
-			$('#time').text('10');
 		}
+		
 		if(e.bin==1){
 			throwing=true;
 			setTimeout(function(){
@@ -242,6 +235,15 @@ $(document).ready(function(){
 			specialEasing:easing});
 		}
 		
+		$('#score').text(parseInt($('#score').text())+parseInt($('#time').text()));
+		rounds++;
+		if(rounds>=5){
+			setTimeout(function(){
+				clearInterval(timer);
+				end();
+			},810);
+		}
+		$('#time').text('10');
 	});
 	$(document).keypress(function(e){
 		if(e.which==49)
