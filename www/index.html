@@ -64,7 +64,8 @@ a.back{position:absolute;bottom:18px;left:20px;}
 		</div>
 		
 		<div id=game>
-			<div class="score">0</div>
+			<div id=time>0</div>
+			<div id=score>0</div>
 			<div style="width:960px;margin-left:auto;margin-right:auto;margin-top:100px;overflow:hidden;margin-bottom:300px;position:relative;" id=cans>
 				<div style="height:300px;width:210px;background:grey;margin-right:40px;float:left;"></div>
 				<div style="height:300px;width:210px;background:blue;margin-right:40px;float:left;"></div>
@@ -198,6 +199,16 @@ $(document).ready(function(){
 		e.preventDefault();
 		$('#home').slideUp(400,function(){
 			$('#game').fadeIn(400);
+			
+			$('#time').text('10');
+			var timer=setInterval(function(){
+				if($('#time').text()=='0'){
+					$('#time').attr('style','').text('11');
+				}
+				$('#time').text(parseInt($('#time').text())-1);
+				if($('#time').text()=='0')
+					$('#time').css('color','red');
+			},1000);
 		});
 	});
 	
@@ -242,9 +253,9 @@ $(document).ready(function(){
 		if(e.bin<=0){
 			alert('You need to calibrate your Myo first.');
 			return;
-		} else {
-			score += 1;
-			$('div.score').html(score);
+		}else{
+			$('#score').text(parseInt($('#score').text())+parseInt($('#time').text()));
+			$('#time').text('10');
 		}
 		if(e.bin==1){
 			throwing=true;
@@ -294,55 +305,17 @@ $(document).ready(function(){
 		
 	});
 	$(document).keypress(function(e){
-		if(throwing)
-			return;
-		if($('#game').css('display')!='none'){
-			if(e.which==49){
-				throwing=true;
-				setTimeout(function(){
-					$('#garbage').css('z-index',-2);
-				},620);
-				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(1)').offset().top,left:$('#cans>div:nth-child(1)').offset().left+$('#cans>div:nth-child(1)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
-				complete:function(){
-					$('#garbage').attr('style','');
-					throwing=false;
-				},
-				specialEasing:easing});
-			}else if(e.which==50){
-				throwing=true;
-				setTimeout(function(){
-					$('#garbage').css('z-index',-2);
-				},620);
-				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(2)').offset().top,left:$('#cans>div:nth-child(2)').offset().left+$('#cans>div:nth-child(2)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
-				complete:function(){
-					$('#garbage').attr('style','');
-					throwing=false;
-				},
-				specialEasing:easing});
-			}else if(e.which==51){
-				throwing=true;
-				setTimeout(function(){
-					$('#garbage').css('z-index',-2);
-				},620);
-				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(3)').offset().top,left:$('#cans>div:nth-child(3)').offset().left+$('#cans>div:nth-child(3)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
-				complete:function(){
-					$('#garbage').attr('style','');
-					throwing=false;
-				},
-				specialEasing:easing});
-			}else if(e.which==52){
-				throwing=true;
-				setTimeout(function(){
-					$('#garbage').css('z-index',-2);
-				},620);
-				$('#garbage').css({top:$('#garbage').offset().top,position:'absolute',left:$('#garbage').offset().left}).animate({top:$('#cans>div:nth-child(4)').offset().top,left:$('#cans>div:nth-child(4)').offset().left+$('#cans>div:nth-child(4)').width()/2-$('#garbage').width()/4,width:$('#garbage').width()/2,height:$('#garbage').height()/2},{duration:800,queue:false,
-				complete:function(){
-					$('#garbage').attr('style','');
-					throwing=false;
-				},
-				specialEasing:easing});
-			}
-		}
+		if(e.which==49)
+			bin=1;
+		else if(e.which==50)
+			bin=2;
+		else if(e.which==51)
+			bin=3;
+		else if(e.which==52)
+			bin=4;
+		else
+			bin=-1;
+		$(document).trigger('throw',{bin:bin});
 	});
 });
 	</script>
