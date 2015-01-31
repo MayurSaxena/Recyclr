@@ -1,1 +1,0 @@
-console.log(function(){r='8';for(i=0;i<69;i++)r+='=';return r+'D'});
