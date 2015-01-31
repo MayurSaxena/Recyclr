@@ -110,16 +110,18 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	var right = 0;
 	var left_cal = false, right_cal = false;
 	
+	var score = 0;
+	
 	myo.on('gyroscope', function(data){
-		// console.log(angle);
+		console.log(angle);
 		if(throw_cons.length == throw_thresh
 		&& throw_cons[throw_cons.length - 1] > throw_strength) {
 			throw_cons = [];
-			console.log(angle);
+			// console.log(angle);
 			if(angle < right && angle > left) {
 				var t = swish(angle);
 				$(document).trigger('throw', {bin: t});
-				console.log(swish(angle));
+				// console.log(swish(angle));
 			} else if(!left_cal || !right_cal) {
 				swish(angle);
 			}
@@ -131,21 +133,27 @@ a.back{position:absolute;bottom:18px;left:20px;}
 	});
 	
 	myo.on('orientation', function(data) {
-		angle = data.x;
+		angle = data.z;
 	});
 	
 	function swish(angle) {
 		var variance = (right - left)/4;
 		if(!left_cal) {
-			myo.zeroOrientation();
+			// myo.zeroOrientation();
 			left = angle;
 			left_cal = true;
 			$(document).trigger('calibrated_left');
 		} else if (!right_cal) {
-			right = angle;
+			if(left < right) {
+				right = angle;
+			} else {
+				right = left;
+				left = angle;
+			}
 			right_cal = true;
 			$(document).trigger('calibrated_right');
 		}
+		console.log(angle);
 		if(angle < left + variance) {
 			return 4;
 		} else if(angle < left + 2 * variance) {
@@ -157,10 +165,10 @@ a.back{position:absolute;bottom:18px;left:20px;}
 		}
 	}
 	$(document).on('calibrate', function() {
-		myo.zeroOrientation();
+		// myo.zeroOrientation();
 		left_cal = false;
 		right_cal = false;
-	})
+	});
 	</script>
 	
 	<script>
@@ -225,6 +233,7 @@ $(document).ready(function(){
 			return;
 		}
 		if(e.bin==1){
+			score += 1;
 			throwing=true;
 			setTimeout(function(){
 				$('#garbage').css('z-index',-2);
