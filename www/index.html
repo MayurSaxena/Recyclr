@@ -215,11 +215,11 @@ $(document).ready(function(){
 		left:"linear"
 	};
 	var throwing=false;
-	$(document).on('throw',function(e){
+	$(document).on('throw',function(e2,e){
 		if(throwing)return;
 		if($('#game').css('display')=='none')return;
 		
-		if(e.bin>0){
+		if(e.bin<=0){
 			alert('You need to calibrate your Myo first.');
 			return;
 		}
